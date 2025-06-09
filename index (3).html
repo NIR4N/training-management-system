@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discharge Summary</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .section-header {
+      background-color: #0d6efd;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    .form-section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+    .required-field::after {
+      content: " *";
+      color: red;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="text-primary">Discharge Summary</h2>
+      <div class="text-muted">Form Version: 1.0</div>
+    </div>
+
+    <!-- Patient Information Section -->
+    <div class="form-section">
+      <div class="section-header">Patient Information</div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label required-field">UHID</label>
+            <input class="form-control" type="text" id="uhid" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label required-field">Name</label>
+            <input class="form-control" type="text" id="name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label required-field">Age / Gender</label>
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Age" aria-label="Age">
+              <select class="form-select" aria-label="Gender">
+                <option selected>Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label required-field">IP No</label>
+            <input class="form-control" type="text" id="ipNo" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Bed No</label>
+            <input class="form-control" type="text" id="bedNo">
+          </div>
+          <div class="mb-3">
+            <label class="form-label required-field">Admission Date</label>
+            <input class="form-control" type="datetime-local" id="admissionDate" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discharge Information -->
+    <div class="form-section">
+      <div class="section-header">Discharge Information</div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label required-field">Primary Consultant</label>
+            <input class="form-control" type="text" id="primaryConsultant" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Other Consultants</label>
+            <input class="form-control" type="text" id="otherConsultants">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label required-field">Date of Discharge</label>
+            <input class="form-control" type="datetime-local" id="dischargeDate" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Date of Death</label>
+            <input class="form-control" type="datetime-local" id="deathDate">
+          </div>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label required-field">Discharge Type</label>
+        <div class="d-flex flex-wrap gap-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dischargeType" id="radioPrimary" value="Primary" required>
+            <label class="form-check-label" for="radioPrimary">Primary</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dischargeType" id="radioSpeciality" value="Speciality">
+            <label class="form-check-label" for="radioSpeciality">Speciality</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dischargeType" id="radioLAMA" value="LAMA">
+            <label class="form-check-label" for="radioLAMA">LAMA</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dischargeType" id="radioDeath" value="Death">
+            <label class="form-check-label" for="radioDeath">Death</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="dischargeType" id="radioTransfer" value="Transfer">
+            <label class="form-check-label" for="radioTransfer">Transfer</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagnosis Information -->
+    <div class="form-section">
+      <div class="section-header">Diagnosis Information</div>
+      <div class="mb-3">
+        <label class="form-label required-field">Admission Type</label>
+        <select class="form-select" id="admissionType" required>
+          <option value="">Select admission type</option>
+          <option>Emergency</option>
+          <option>Elective</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label required-field">Admission / Provisional Diagnosis</label>
+        <textarea class="form-control" rows="2" id="provDiagnosis" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label required-field">Final / Discharge Diagnosis</label>
+        <textarea class="form-control" rows="2" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Co‑morbidities with Duration and Treatment</label>
+        <textarea class="form-control" rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- Clinical Information -->
+    <div class="form-section">
+      <div class="section-header">Clinical Information</div>
+      <div class="mb-3">
+        <label class="form-label required-field">Brief History and Examination Findings on Admission</label>
+        <textarea class="form-control" rows="4" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label required-field">Hospital Course (consultations, exams, procedures, treatments)</label>
+        <textarea class="form-control" rows="4" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label required-field">Condition at Discharge</label>
+        <textarea class="form-control" rows="3" required></textarea>
+      </div>
+    </div>
+
+    <!-- Medications & Investigations -->
+    <div class="form-section">
+      <div class="section-header">Medications & Investigations</div>
+      <div class="mb-3">
+        <label class="form-label required-field">Significant Medications Given During Hospitalization</label>
+        <textarea class="form-control" rows="3" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Significant Laboratory Investigations (with dates and results)</label>
+        <textarea class="form-control" rows="4"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Interpretations of Lab Results</label>
+        <textarea class="form-control" rows="2"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Significant Radiology/Imaging Investigations</label>
+        <textarea class="form-control" rows="4"></textarea>
+      </div>
+    </div>
+
+    <!-- Discharge Plan -->
+    <div class="form-section">
+      <div class="section-header">Discharge Plan</div>
+      <div class="mb-3">
+        <label class="form-label required-field">Discharge Medications (with instructions)</label>
+        <textarea class="form-control" rows="4" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label required-field">Activity Instructions</label>
+        <textarea class="form-control" rows="2" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label required-field">Diet Instructions</label>
+        <textarea class="form-control" rows="2" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Follow-up Plan</label>
+        <div id="followupContainer">
+          <div class="row g-3 mb-3 followup-item">
+            <div class="col-md-3">
+              <label class="form-label">Date</label>
+              <input class="form-control" type="date">
+            </div>
+            <div class="col-md-7">
+              <label class="form-label">Investigations & With Whom</label>
+              <textarea class="form-control" rows="1"></textarea>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="button" class="btn btn-outline-danger btn-sm remove-followup">Remove</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="addFollowup">+ Add Follow-up</button>
+      </div>
+    </div>
+
+    <!-- Signature Section -->
+    <div class="form-section">
+      <div class="section-header">Attestation</div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label required-field">Discharging Physician</label>
+          <input class="form-control" type="text" required>
+          <div class="mt-2">
+            <label class="form-label">Signature</label>
+            <input class="form-control" type="text" placeholder="Electronic signature">
+          </div>
+          <div class="mt-2">
+            <label class="form-label">Date/Time</label>
+            <input class="form-control" type="datetime-local">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Patient/Surrogate Acknowledgement</label>
+          <textarea class="form-control" rows="3" placeholder="Name & Signature"></textarea>
+          <div class="mt-2">
+            <label class="form-label">Date/Time</label>
+            <input class="form-control" type="datetime-local">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <button type="button" class="btn btn-outline-secondary">Save Draft</button>
+      <div>
+        <button type="button" class="btn btn-outline-danger me-2">Cancel</button>
+        <button type="submit" class="btn btn-success">Submit Discharge Summary</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Simple script to add more follow-up items
+    document.getElementById('addFollowup').addEventListener('click', function() {
+      const container = document.getElementById('followupContainer');
+      const newItem = document.querySelector('.followup-item').cloneNode(true);
+      newItem.querySelector('input[type="date"]').value = '';
+      newItem.querySelector('textarea').value = '';
+      container.appendChild(newItem);
+      
+      // Add event listener to new remove button
+      newItem.querySelector('.remove-followup').addEventListener('click', function() {
+        if (document.querySelectorAll('.followup-item').length > 1) {
+          this.closest('.followup-item').remove();
+        } else {
+          alert('At least one follow-up item is required.');
+        }
+      });
+    });
+
+    // Add event listener to initial remove button
+    document.querySelector('.remove-followup').addEventListener('click', function() {
+      if (document.querySelectorAll('.followup-item').length > 1) {
+        this.closest('.followup-item').remove();
+      } else {
+        alert('At least one follow-up item is required.');
+      }
+    });
+  </script>
+</body>
+</html>
