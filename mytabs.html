@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --danger-color: #f72585;
+            --success-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+        
+        .app-container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        /* Main tabs styling */
+        .main-tabs-container {
+            background: white;
+            position: relative;
+        }
+        
+        .main-tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            padding: 0 20px;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .main-tabs::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        
+        .main-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            color: var(--gray-color);
+            font-weight: 500;
+            text-align: center;
+            position: relative;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+        
+        .main-tab:hover {
+            color: var(--primary-color);
+        }
+        
+        .main-tab.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .main-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        /* Nested tabs styling */
+        .nested-tabs-container {
+            background: #f8f9fa;
+            padding: 0 20px;
+        }
+        
+        .nested-tabs {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .nested-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nested-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            color: var(--gray-color);
+            font-weight: 500;
+            position: relative;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        
+        .nested-tab:hover {
+            color: var(--primary-color);
+        }
+        
+        .nested-tab.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .nested-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        /* Tab content styling */
+        .tab-content {
+            display: none;
+            padding: 25px;
+            min-height: 400px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Content cards */
+        .content-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .content-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input {
+            margin-right: 8px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        /* Logout tab styling */
+        .logout-content {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .logout-icon {
+            font-size: 60px;
+            color: var(--danger-color);
+            margin-bottom: 20px;
+        }
+        
+        .logout-content h2 {
+            color: var(--danger-color);
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .logout-content p {
+            color: var(--gray-color);
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn-logout {
+            background: linear-gradient(135deg, var(--danger-color), #ff3a8e);
+            color: white;
+            padding: 14px 40px;
+            font-size: 16px;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(247, 37, 133, 0.2);
+        }
+        
+        .btn-logout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(247, 37, 133, 0.3);
+        }
+        
+        /* Status indicators */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .app-container {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .main-tab, .nested-tab {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            
+            .tab-content {
+                padding: 15px;
+            }
+        }
+        
+        /* Animation for tab switching */
+        .tab-content {
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Training Management System</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <span>Admin User</span>
+            </div>
+        </div>
+        
+        <!-- Main Tabs -->
+        <div class="main-tabs-container">
+            <div class="main-tabs">
+                <div class="main-tab active" onclick="openMainTab(event, 'trainingAdmin')">
+                    <i class="fas fa-user-shield"></i> Training Admin
+                </div>
+                <div class="main-tab" onclick="openMainTab(event, 'deptHead')">
+                    <i class="fas fa-user-tie"></i> Department Head
+                </div>
+                <div class="main-tab" onclick="openMainTab(event, 'participant')">
+                    <i class="fas fa-users"></i> Participant
+                </div>
+                <div class="main-tab" onclick="openMainTab(event, 'logout')">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </div>
+            </div>
+        </div>
+        
+        <!-- Training Admin Content -->
+        <div id="trainingAdmin" class="tab-content active">
+            <!-- Nested Tabs for Training Admin -->
+            <div class="nested-tabs-container">
+                <div class="nested-tabs">
+                    <div class="nested-tab active" onclick="openNestedTab(event, 'new', 'trainingAdmin')">
+                        <i class="fas fa-plus-circle"></i> New
+                    </div>
+                    <div class="nested-tab" onclick="openNestedTab(event, 'allocation', 'trainingAdmin')">
+                        <i class="fas fa-tasks"></i> Allocation
+                    </div>
+                    <div class="nested-tab" onclick="openNestedTab(event, 'approved', 'trainingAdmin')">
+                        <i class="fas fa-check-circle"></i> Approved
+                    </div>
+                    <div class="nested-tab" onclick="openNestedTab(event, 'allow', 'trainingAdmin')">
+                        <i class="fas fa-unlock-alt"></i> Allow
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Nested Tab Contents for Training Admin -->
+            <div id="new" class="nested-tab-content active">
+                <div class="content-card">
+                    <h3>Create New Training Request</h3>
+                    <form>
+                        <div class="form-group">
+                            <label for="trainingTitle">Training Title</label>
+                            <input type="text" id="trainingTitle" class="form-control" placeholder="Enter training title">
+                        </div>
+                        <div class="form-group">
+                            <label for="trainingDescription">Description</label>
+                            <textarea id="trainingDescription" class="form-control" placeholder="Enter detailed description"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="allocation" class="nested-tab-content">
+                <div class="content-card">
+                    <h3>Training Allocation</h3>
+                    <p>Allocate training resources and participants here.</p>
+                    <div class="form-group">
+                        <label for="selectTraining">Select Training</label>
+                        <select id="selectTraining" class="form-control">
+                            <option>Leadership Skills Workshop</option>
+                            <option>Technical Training - Advanced</option>
+                            <option>Project Management Fundamentals</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="participantList">Select Participants</label>
+                        <select id="participantList" class="form-control" multiple>
+                            <option>John Doe (Marketing)</option>
+                            <option>Jane Smith (Engineering)</option>
+                            <option>Robert Johnson (HR)</option>
+                            <option>Emily Davis (Finance)</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary">Allocate Resources</button>
+                </div>
+            </div>
+            
+            <div id="approved" class="nested-tab-content">
+                <div class="content-card">
+                    <h3>Approved Trainings</h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f8f9fa;">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef;">Training Name</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef;">Date</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef;">Participants</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e9ecef;">
+                                    <td style="padding: 12px;">Leadership Workshop</td>
+                                    <td style="padding: 12px;">15 Oct 2023</td>
+                                    <td style="padding: 12px;">12</td>
+                                    <td style="padding: 12px;"><span class="status-badge status-approved">Approved</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e9ecef;">
+                                    <td style="padding: 12px;">Technical Training</td>
+                                    <td style="padding: 12px;">22 Oct 2023</td>
+                                    <td style="padding: 12px;">8</td>
+                                    <td style="padding: 12px;"><span class="status-badge status-approved">Approved</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="allow" class="nested-tab-content">
+                <div class="content-card">
+                    <h3>Access Permissions</h3>
+                    <p>Manage permissions and access controls for training modules.</p>
+                    <div class="form-group">
+                        <label for="accessLevel">Access Level</label>
+                        <select id="accessLevel" class="form-control">
+                            <option>Full Access</option>
+                            <option>View Only</option>
+                            <option>Restricted Access</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="userSelection">Select Users</label>
+                        <select id="userSelection" class="form-control" multiple>
+                            <option>All Department Heads</option>
+                            <option>Training Coordinators</option>
+                            <option>External Trainers</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary">Update Permissions</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Department Head Content -->
+        <div id="deptHead" class="tab-content">
+            <!-- Nested Tabs for Department Head -->
+            <div class="nested-tabs-container">
+                <div class="nested-tabs">
+                    <div class="nested-tab active" onclick="openNestedTab(event, 'pending', 'deptHead')">
+                        <i class="fas fa-clock"></i> Pending
+                    </div>
+                    <div class="nested-tab" onclick="openNestedTab(event, 'cleared', 'deptHead')">
+                        <i class="fas fa-check"></i> Cleared
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Nested Tab Contents for Department Head -->
+            <div id="pending" class="nested-tab-content active">
+                <div class="content-card">
+                    <h3>Pending Training Requests</h3>
+                    <div class="form-group">
+                        <h4><i class="fas fa-check-double"></i> Validate</h4>
+                        <input type="text" class="form-control" placeholder="Enter validation comments...">
+                    </div>
+                    <div class="form-group">
+                        <h4><i class="fas fa-user-tag"></i> Nomination Submission</h4>
+                        <textarea class="form-control" placeholder="Enter nomination details including participant names, roles, and justification..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Priority Level</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="priorityHigh" name="priority" value="high">
+                                <label for="priorityHigh">High</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="priorityMedium" name="priority" value="medium">
+                                <label for="priorityMedium">Medium</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="priorityLow" name="priority" value="low">
+                                <label for="priorityLow">Low</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary">Submit for Approval</button>
+                </div>
+            </div>
+            
+            <div id="cleared" class="nested-tab-content">
+                <div class="content-card">
+                    <h3>Cleared Training Requests</h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f8f9fa;">
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef;">Training Name</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef;">Date</th>
+                                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e9ecef;">
+                                    <td style="padding: 12px;">Advanced Excel Workshop</td>
+                                    <td style="padding: 12px;">05 Oct 2023</td>
+                                    <td style="padding: 12px;"><span class="status-badge status-approved">Cleared</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e9ecef;">
+                                    <td style="padding: 12px;">Communication Skills</td>
+                                    <td style="padding: 12px;">12 Oct 2023</td>
+                                    <td style="padding: 12px;"><span class="status-badge status-approved">Cleared</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Participant Content -->
+        <div id="participant" class="tab-content">
+            <!-- Nested Tab for Participant -->
+            <div class="nested-tabs-container">
+                <div class="nested-tabs">
+                    <div class="nested-tab active" onclick="openNestedTab(event, 'willingness', 'participant')">
+                        <i class="fas fa-comment-alt"></i> Willingness/Feedback
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Nested Tab Content for Participant -->
+            <div id="willingness" class="nested-tab-content active">
+                <div class="content-card">
+                    <h3>Training Participation Confirmation</h3>
+                    <div class="form-group">
+                        <label>Are you willing to participate in this training?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="willingYes" name="willingness" value="yes">
+                                <label for="willingYes">Yes, I will participate</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="willingNo" name="willingness" value="no">
+                                <label for="willingNo">No, I cannot participate</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback">Your Feedback (Optional)</label>
+                        <textarea id="feedback" class="form-control" placeholder="Please share any comments, concerns, or suggestions about this training..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Training Preference</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="prefOnline" name="preference" value="online">
+                                <label for="prefOnline">Online</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="prefInPerson" name="preference" value="in-person">
+                                <label for="prefInPerson">In-Person</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="prefHybrid" name="preference" value="hybrid">
+                                <label for="prefHybrid">Hybrid</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary">Submit Response</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Logout Content -->
+        <div id="logout" class="tab-content">
+            <div class="logout-content">
+                <div class="logout-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <h2>Ready to Leave?</h2>
+                <p>You're about to sign out of your account. Please confirm that you want to log out or cancel to remain logged in. All unsaved changes might be lost.</p>
+                <button class="btn btn-logout">Confirm Logout</button>
+                <div style="margin-top: 20px;">
+                    <a href="#" onclick="openMainTab(event, 'trainingAdmin')" style="color: var(--gray-color); text-decoration: none;">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle main tab switching
+        function openMainTab(evt, tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            // Remove active class from all main tabs
+            const mainTabs = document.getElementsByClassName("main-tab");
+            for (let i = 0; i < mainTabs.length; i++) {
+                mainTabs[i].classList.remove("active");
+            }
+            
+            // Show the current tab and add active class
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            // Activate the first nested tab of the main tab
+            const firstNestedTab = document.querySelector(`#${tabName} .nested-tab`);
+            if (firstNestedTab) {
+                const firstNestedTabId = firstNestedTab.getAttribute("onclick").split("'")[1];
+                const nestedTabContents = document.querySelectorAll(`#${tabName} .nested-tab-content`);
+                nestedTabContents.forEach(content => content.classList.remove("active"));
+                document.getElementById(firstNestedTabId).classList.add("active");
+                
+                // Set first nested tab as active
+                const nestedTabs = document.querySelectorAll(`#${tabName} .nested-tab`);
+                nestedTabs.forEach(tab => tab.classList.remove("active"));
+                firstNestedTab.classList.add("active");
+            }
+        }
+        
+        // Function to handle nested tab switching
+        function openNestedTab(evt, tabName, parentTabId) {
+            // Hide all nested tab contents within the same parent tab
+            const nestedTabContents = document.querySelectorAll(`#${parentTabId} .nested-tab-content`);
+            for (let i = 0; i < nestedTabContents.length; i++) {
+                nestedTabContents[i].classList.remove("active");
+            }
+            
+            // Remove active class from all nested tabs within the same parent tab
+            const nestedTabs = document.querySelectorAll(`#${parentTabId} .nested-tab`);
+            for (let i = 0; i < nestedTabs.length; i++) {
+                nestedTabs[i].classList.remove("active");
+            }
+            
+            // Show the current nested tab and add active class
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
